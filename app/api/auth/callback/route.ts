@@ -24,7 +24,7 @@
 //   }
 // }
 
-
+export const runtime = 'nodejs' // Vercel Edge → Node
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
