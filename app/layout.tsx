@@ -38,23 +38,67 @@
 import './globals.css';
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'Resume Tailor - Professional AI Resume Builder',
+  description: 'Instantly build professional, AI-tailored resumes that stand out and win interviews.',
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>
-        <nav className="p-4 border-b">
-          <Link href="/" className="mr-4">Home</Link>
-          <Link href="/login" className="mr-4">Login</Link>
-          <Link href="/dashboard">Dashboard</Link>
-        </nav>
-        <main className="p-4">
+    <html lang="en" className="dark">
+      <body className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-purple-500/30 selection:text-purple-200">
+        {/* Premium sticky glassmorphic header */}
+        <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur-md transition-all duration-300">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            {/* Logo and branding */}
+            <div className="flex items-center space-x-3">
+              <Link href="/" className="flex items-center space-x-2 group">
+                <div className="w-9 h-9 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform duration-300">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" />
+                    <polyline points="14,2 14,8 20,8" />
+                  </svg>
+                </div>
+                <span className="text-xl font-bold bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent group-hover:text-purple-300 transition-colors">
+                  Resume Tailor
+                </span>
+              </Link>
+            </div>
+
+            {/* Navigation links */}
+            <nav className="flex items-center space-x-1 sm:space-x-2">
+              <Link
+                href="/"
+                className="px-3.5 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all duration-300"
+              >
+                Home
+              </Link>
+              <Link
+                href="/dashboard"
+                className="px-3.5 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all duration-300"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/login"
+                className="ml-2 px-4.5 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg shadow-purple-500/20 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
+              >
+                Login
+              </Link>
+            </nav>
+          </div>
+        </header>
+
+        {/* Content container (full bleed, padding is handled page-internally) */}
+        <div className="flex-grow flex flex-col">
           {children}
-        </main>
+        </div>
       </body>
     </html>
   );
 }
+

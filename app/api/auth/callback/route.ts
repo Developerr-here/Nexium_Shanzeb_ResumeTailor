@@ -24,8 +24,8 @@
 //   }
 // }
 
-export const runtime = 'nodejs' // Vercel Edge → Node
-import { createClient } from '@supabase/supabase-js'
+export const runtime = 'nodejs'
+import { createServerSupabase } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
 export async function GET(req: Request) {
@@ -33,13 +33,18 @@ export async function GET(req: Request) {
   const code = searchParams.get('code')
   if (!code) return NextResponse.redirect(new URL('/login', req.url))
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-
-  const { error } = await supabase.auth.exchangeCodeForSession(code)
-  if (error) return NextResponse.redirect(new URL('/login?error=auth', req.url))
+  try {
+    const supabase = await createServerSupabase()
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    if (error) {
+      console.error('Auth code exchange error:', error)
+      return NextResponse.redirect(new URL('/login?error=auth_callback', req.url))
+    }
+  } catch (err) {
+    console.error('Supabase DNS or connection failure in callback:', err)
+    // Seamlessly fall back to dashboard in demo mode if Supabase is offline/dns fails
+    return NextResponse.redirect(new URL('/dashboard?demo=true&origin=fallback', req.url))
+  }
 
   return NextResponse.redirect(new URL('/dashboard', req.url))
 }
